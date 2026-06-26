@@ -14,51 +14,53 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "preguntas")
-public class Pregunta {
+@Table(name = "respuestas")
+public class Respuesta {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_pregunta")
-    private int idPregunta;
+    @Column(name = "id_respuesta")
+    private int idRespuesta;
 
-    @Column(name = "titulo", nullable = false, length = 200)
-    private String titulo;
-
-    @Column(name = "descripcion", nullable = false, columnDefinition = "TEXT")
-    private String descripcion;
+    @Column(name = "contenido", nullable = false, columnDefinition = "TEXT")
+    private String contenido;
 
     @Column(name = "fecha_creacion", insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
 
-    // muchas preguntas pertenecen a un solo Usuario
+    //muchas respuestas pertenecen a una sola Pregunta
+    @ManyToOne
+    @JoinColumn(name = "id_pregunta", nullable = false)
+    private Pregunta pregunta;
+
+    //muchas respuestas son escritas por un solo Usuario
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
 
-    public Pregunta() {
+    public Respuesta() {
     }
 
-    public Pregunta(String titulo, String descripcion, Usuario usuario) {
-        this.titulo = titulo;
-        this.descripcion = descripcion;
+    public Respuesta(String contenido, Pregunta pregunta, Usuario usuario) {
+        this.contenido = contenido;
+        this.pregunta = pregunta;
         this.usuario = usuario;
     }
 
-    public int getIdPregunta() { return idPregunta; }
-    public void setIdPregunta(int idPregunta) { this.idPregunta = idPregunta; }
+    public int getIdRespuesta() { return idRespuesta; }
+    public void setIdRespuesta(int idRespuesta) { this.idRespuesta = idRespuesta; }
 
-    public String getTitulo() { return titulo; }
-    public void setTitulo(String titulo) { this.titulo = titulo; }
-
-    public String getDescripcion() { return descripcion; }
-    public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+    public String getContenido() { return contenido; }
+    public void setContenido(String contenido) { this.contenido = contenido; }
 
     public Date getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(Date fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+
+    public Pregunta getPregunta() { return pregunta; }
+    public void setPregunta(Pregunta pregunta) { this.pregunta = pregunta; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }

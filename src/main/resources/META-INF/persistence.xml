@@ -4,6 +4,7 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>jhonnydev.codesolve.modelo.Usuario</class>
     <class>jhonnydev.codesolve.modelo.Pregunta</class>
+    <class>jhonnydev.codesolve.modelo.Respuesta</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/codesolve_db?serverTimezone=UTC&amp;useSSL=false"/>
