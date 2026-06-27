@@ -106,6 +106,15 @@
             .btn-submit:active {
                 transform: translateY(1px);
             }
+            
+            .input-error { 
+                border-color: #ef4444 !important; 
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important; 
+            }
+            .input-success { 
+                border-color: #10b981 !important; 
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important; 
+            }
 
             .alert-error {
                 background: rgba(239, 68, 68, 0.1);
@@ -135,45 +144,95 @@
     </head>
     <body>
 
-        <div class="register-card">
-            <div class="brand">
-                <h1>CodeSolve</h1>
-                <p>La comunidad donde los desarrolladores encuentran la respuesta.</p>
-            </div>
-            
-            <% if (request.getParameter("error") != null) { %>
-                <div class="alert-error">
-                    <strong>¡Error!</strong> No se pudo procesar el registro. Inténtalo de nuevo o usa otro correo.
-                </div>
-            <% } %>
-
-            <form action="UsuarioServlet" method="POST">
-                
-                <input type="hidden" name="accion" value="registrar">
-                
-                <div class="form-group">
-                    <label for="nombre">Nombre Completo</label>
-                    <input type="text" id="nombre" name="txtNombre" required placeholder="Tu nombre o alias">
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" name="txtEmail" required placeholder="nombre@ejemplo.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="txtPassword" required placeholder="••••••••">
-                </div>
-                
-                <button type="submit" class="btn-submit">Crear Cuenta</button>
-            </form>
-            
-            <div class="footer-links">
-                ¿Ya eres miembro? <a href="login.jsp">Inicia sesión</a>
-            </div>
+    <div class="register-card" id="card">
+        <div class="brand">
+            <h1>CodeSolve</h1>
+            <p>La comunidad donde los desarrolladores encuentran la respuesta.</p>
         </div>
         
+        <% if (request.getParameter("error") != null) { %>
+            <div class="alert-error">
+                <strong>¡Error!</strong> No se pudo procesar el registro. Inténtalo de nuevo o usa otro correo.
+            </div>
+        <% } %>
 
-    </body>
+        <form action="UsuarioServlet" method="POST" id="registerForm">
+            
+            <input type="hidden" name="accion" value="registrar">
+            
+            <div class="form-group" id="groupNombre">
+                <label for="nombre">Nombre o Alias</label>
+                <input type="text" id="nombre" name="txtNombre" required placeholder="Escribe tu nombre o alias">
+            </div>
+            
+            <div class="form-group" id="groupEmail">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" id="email" name="txtEmail" required placeholder="Escribe tu correo">
+            </div>
+            
+            <div class="form-group" id="groupPassword">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="txtPassword" required placeholder="••••••••">
+            </div>
+            
+            <button type="submit" class="btn-submit" id="btnSubmit">Crear Cuenta</button>
+        </form>
+        
+        <div class="footer-links">
+            ¿Ya eres miembro? <a href="login.jsp">Inicia sesión</a>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const form = document.getElementById('registerForm');
+        const card = document.getElementById('card');
+        const nombre = document.getElementById('nombre');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const btnSubmit = document.getElementById('btnSubmit');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        function marcarInput(input, esValido) {
+            if (esValido) {
+                input.classList.remove('input-error');
+                input.classList.add('input-success');
+            } else {
+                input.classList.remove('input-success');
+                input.classList.add('input-error');
+            }
+            return esValido;
+        }
+
+        nombre.addEventListener('input', () => {
+            marcarInput(nombre, nombre.value.trim().length >= 3);
+        });
+
+        email.addEventListener('input', () => {
+            marcarInput(email, emailRegex.test(email.value.trim()));
+        });
+
+        password.addEventListener('input', () => {
+            marcarInput(password, password.value.length >= 6);
+        });
+
+        form.addEventListener('submit', function(e) {
+            const v1 = marcarInput(nombre, nombre.value.trim().length >= 3);
+            const v2 = marcarInput(email, emailRegex.test(email.value.trim()));
+            const v3 = marcarInput(password, password.value.length >= 6);
+
+            if (!v1 || !v2 || !v3) {
+                e.preventDefault();
+                
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+            } else {
+                btnSubmit.innerText = "Procesando...";
+                btnSubmit.style.opacity = "0.7";
+            }
+        });
+    });
+    </script>
+</body>
 </html>
