@@ -1,6 +1,6 @@
 <%-- 
-    Document   : Registro
-    Created on : 26 jun. 2026, 16:38:15
+    Document   : Login
+    Created on : 27 jun. 2026, 12:09:36
     Author     : Jhonny Dev
 --%>
 
@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Únete a CodeSolve</title>
+        <title>Iniciar Sesión en CodeSolve</title>
         <style>
             * { 
                 box-sizing: border-box; 
@@ -30,8 +30,8 @@
                 align-items: center;
                 min-height: 100vh;
                 margin: 0;
-                
             }
+
             .register-card {
                 background: #1e293b;
                 padding: 40px;
@@ -41,6 +41,13 @@
                 max-width: 450px;
                 border: 1px solid #334155;
             }
+
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-6px); }
+                40%, 80% { transform: translateX(6px); }
+            }
+            .shake { animation: shake 0.4s ease; }
 
             .brand {
                 text-align: center;
@@ -86,6 +93,15 @@
                 box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
             }
 
+            .input-error { 
+                border-color: #ef4444 !important; 
+                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important; 
+            }
+            .input-success { 
+                border-color: #10b981 !important; 
+                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important; 
+            }
+
             .btn-submit {
                 width: 100%;
                 padding: 14px;
@@ -102,18 +118,6 @@
             .btn-submit:hover {
                 box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
                 transform: translateY(-1px);
-            }
-            .btn-submit:active {
-                transform: translateY(1px);
-            }
-            
-            .input-error { 
-                border-color: #ef4444 !important; 
-                box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important; 
-            }
-            .input-success { 
-                border-color: #10b981 !important; 
-                box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2) !important; 
             }
 
             .alert-error {
@@ -147,47 +151,42 @@
     <div class="register-card" id="card">
         <div class="brand">
             <h1>CodeSolve</h1>
-            <p>La comunidad donde los desarrolladores encuentran la respuesta.</p>
+            <p>Bienvenido de vuelta, desarrollador.</p>
         </div>
         
+        <%-- Capturar errores devueltos por el servlet o sesiones expiradas --%>
         <% if (request.getParameter("error") != null) { %>
             <div class="alert-error">
-                <strong>¡Error!</strong> No se pudo procesar el registro. Inténtalo de nuevo o usa otro correo.
+                <strong>¡Acceso Denegado!</strong> Credenciales inválidas o sesión expirada.
             </div>
         <% } %>
 
-        <form action="UsuarioServlet" method="POST" id="registerForm">
+        <form action="UsuarioServlet" method="POST" id="loginForm">
             
-            <input type="hidden" name="accion" value="registrar">
+            <input type="hidden" name="accion" value="login">
             
-            <div class="form-group" id="groupNombre">
-                <label for="nombre">Nombre o Alias</label>
-                <input type="text" id="nombre" name="txtNombre" required placeholder="Escribe tu nombre o alias">
-            </div>
-            
-            <div class="form-group" id="groupEmail">
+            <div class="form-group">
                 <label for="email">Correo Electrónico</label>
-                <input type="email" id="email" name="txtEmail" required placeholder="Escribe tu correo">
+                <input type="email" id="email" name="txtEmail" required placeholder="Ingresa tu correo">
             </div>
             
-            <div class="form-group" id="groupPassword">
+            <div class="form-group">
                 <label for="password">Contraseña</label>
                 <input type="password" id="password" name="txtPassword" required placeholder="••••••••">
             </div>
             
-            <button type="submit" class="btn-submit" id="btnSubmit">Crear Cuenta</button>
+            <button type="submit" class="btn-submit" id="btnSubmit">Ingresar</button>
         </form>
         
         <div class="footer-links">
-            ¿Ya eres miembro? <a href="Login.jsp">Inicia sesión</a>
+            ¿Nuevo en la comunidad? <a href="Registro.jsp">Crea una cuenta aquí</a>
         </div>
     </div>
 
     <script>
     document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById('registerForm');
+        const form = document.getElementById('loginForm');
         const card = document.getElementById('card');
-        const nombre = document.getElementById('nombre');
         const email = document.getElementById('email');
         const password = document.getElementById('password');
         const btnSubmit = document.getElementById('btnSubmit');
@@ -205,10 +204,7 @@
             return esValido;
         }
 
-        nombre.addEventListener('input', () => {
-            marcarInput(nombre, nombre.value.trim().length >= 3);
-        });
-
+        // Validación en tiempo real para el login
         email.addEventListener('input', () => {
             marcarInput(email, emailRegex.test(email.value.trim()));
         });
@@ -217,18 +213,18 @@
             marcarInput(password, password.value.length >= 6);
         });
 
+        // Interceptar submit
         form.addEventListener('submit', function(e) {
-            const v1 = marcarInput(nombre, nombre.value.trim().length >= 3);
-            const v2 = marcarInput(email, emailRegex.test(email.value.trim()));
-            const v3 = marcarInput(password, password.value.length >= 6);
+            const v1 = marcarInput(email, emailRegex.test(email.value.trim()));
+            const v2 = marcarInput(password, password.value.length >= 6);
 
-            if (!v1 || !v2 || !v3) {
+            if (!v1 || !v2) {
                 e.preventDefault();
                 
                 card.classList.add('shake');
                 setTimeout(() => card.classList.remove('shake'), 400);
             } else {
-                btnSubmit.innerText = "Procesando...";
+                btnSubmit.innerText = "Verificando...";
                 btnSubmit.style.opacity = "0.7";
             }
         });
