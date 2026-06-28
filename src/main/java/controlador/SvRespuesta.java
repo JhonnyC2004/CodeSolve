@@ -35,12 +35,12 @@ public class SvRespuesta extends HttpServlet {
         Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 
         if (usuarioLogueado == null) {
-            response.sendRedirect("login.jsp?error=sesion_expirada");
+            response.sendRedirect("Login.jsp?error=sesion_expirada");
             return;
         }
 
         String contenido = request.getParameter("txtContenido");
-        String idPreguntaStr = request.getParameter("txtIdPregunta");
+        String idPreguntaStr = request.getParameter("idPregunta");
 
         try {
             int idPregunta = Integer.parseInt(idPreguntaStr);
@@ -50,19 +50,21 @@ public class SvRespuesta extends HttpServlet {
 
             Respuesta nuevaRespuesta = new Respuesta(contenido, preguntaAsociada, usuarioLogueado);
 
-            boolean exito = respuestaDAO.registrarRespuesta(nuevaRespuesta);
+            nuevaRespuesta.setFechaCreacion(new java.util.Date());
 
-            if (exito) {
-                response.sendRedirect("verPregunta.jsp?id=" + idPregunta + "&msg=respuesta_enviada");
-            } else {
-                response.sendRedirect("verPregunta.jsp?id=" + idPregunta + "&error=fallo_respuesta");
-            }
-            
-        } catch (NumberFormatException e) {
+        boolean exito = respuestaDAO.registrarRespuesta(nuevaRespuesta);
+
+        if(exito) {
+            response.sendRedirect("DetallePregunta.jsp?id=" + idPregunta + "&msg=respuesta_enviada");
+        }else {
+            response.sendRedirect("DetallePregunta.jsp?id=" + idPregunta + "&error=fallo_respuesta");
+        }
+        
+        }catch (NumberFormatException e) {
             System.out.println("Error al procesar el ID de la pregunta: " + e.getMessage());
             response.sendRedirect("index.jsp");
         }
-    }
+}
 
  
     @Override

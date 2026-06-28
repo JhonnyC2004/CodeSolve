@@ -253,30 +253,36 @@
                             String nombreAutor = (autor != null) ? autor.getNombre() : "Anónimo";
                 %>
                             <div class="question-card">
-                                <div class="question-title"><%= p.getTitulo() %></div>
+                                <div class="question-title">
+                                   <a href="DetallePregunta.jsp?id=<%= p.getIdPregunta() %>" style="color: #38bdf8; 
+                                   text-decoration: none; font-weight: 600;"><%= p.getTitulo() %></a>
+                                </div>
                                 <div class="question-desc">
                                     <%= p.getDescripcion() %>
                                 </div>
                                 <div class="question-footer">
                                     <div class="tags">
-                                        <%
-                                            String tagsPlano = p.getEtiquetas(); 
-                                            if (tagsPlano != null && !tagsPlano.isEmpty()) {
-                                                String[] listaTags = tagsPlano.split(",");
-                                                for (String tag : listaTags) {
-                                        %>
-                                                    <a href="index.jsp?txtBuscar=<%= tag.trim() %>" class="tag" 
-                                                       style="text-decoration: none;"><%= tag.trim() %></a>
-                                        <%
-                                                }
-                                            }else{
-                                        %>
-                                                <span class="tag">general</span>
-                                        <%
-                                            }
-                                        %>
-                                    </div>
-                                    <div>Por <span><%= nombreAutor %></span> • <%= p.getFechaCreacion() %></div>
+                                    <%
+                                      String tagsPlano = p.getEtiquetas(); 
+                                      int totalRespuestas = (p.getListaRespuestas() != null) ? p.getListaRespuestas().size() : 0;
+
+                                      if (tagsPlano != null && !tagsPlano.isEmpty()) {
+                                          String[] listaTags = tagsPlano.split(",");
+                                          for (String tag : listaTags) {
+                                    %>
+                                      <a href="index.jsp?txtBuscar=<%= tag.trim() %>" class="tag" style="text-decoration: none;">
+                                      <%= tag.trim() %> (<%= totalRespuestas %>)
+                                      </a>
+                                    <%
+                                          }
+                                      }else{
+                                      %>
+                                      <span class="tag">general (<%= totalRespuestas %>)</span>
+                                      <%
+                                      }
+                                    %>
+                                    </div> 
+                                         <div>Por <span><%= nombreAutor %></span> • <%= p.getFechaCreacion() %></div>
                                 </div>
                             </div>
                 <%

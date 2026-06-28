@@ -2,13 +2,16 @@
 package jhonnydev.codesolve.modelo;
 
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -42,6 +45,9 @@ public class Pregunta {
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
+    
+    @OneToMany(mappedBy = "pregunta", fetch = FetchType.LAZY)
+    private List<Respuesta> listaRespuestas;
 
     public Pregunta() {
     }
@@ -75,5 +81,13 @@ public class Pregunta {
     if (this.fechaCreacion == null) {
         this.fechaCreacion = new Date(); 
     }
-}
+    }
+    
+    public List<Respuesta> getListaRespuestas() {
+        return listaRespuestas;
+    }
+
+    public void setListaRespuestas(List<Respuesta> listaRespuestas) {
+        this.listaRespuestas = listaRespuestas;
+    }
 }

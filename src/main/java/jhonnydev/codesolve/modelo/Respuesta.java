@@ -27,7 +27,7 @@ public class Respuesta {
     @Column(name = "contenido", nullable = false, columnDefinition = "TEXT")
     private String contenido;
 
-    @Column(name = "fecha_creacion", insertable = false, updatable = false)
+    @Column(name = "fecha", insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
 

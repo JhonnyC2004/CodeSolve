@@ -50,4 +50,13 @@ public class PreguntaDAO {
         em.close();
       }
     }
+    //busqueda para facilitar la respuesta
+    public Pregunta buscarPreguntaPorId(int id) {
+    EntityManager em = emf.createEntityManager();
+    try {
+        return em.find(Pregunta.class, id);
+    } finally {
+        em.close();
+    }
+}
 }
