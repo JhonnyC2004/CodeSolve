@@ -34,6 +34,9 @@ public class Pregunta {
     @Column(name = "fecha", insertable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
+    
+    @Column(name = "etiquetas")
+    private String etiquetas;
 
     // muchas preguntas pertenecen a un solo Usuario
     @ManyToOne
@@ -60,6 +63,9 @@ public class Pregunta {
 
     public Date getFechaCreacion() { return fechaCreacion; }
     public void setFechaCreacion(Date fechaCreacion) { this.fechaCreacion = fechaCreacion; }
+
+    public String getEtiquetas() { return etiquetas; }
+    public void setEtiquetas(String etiquetas) { this.etiquetas = etiquetas; }
 
     public Usuario getUsuario() { return usuario; }
     public void setUsuario(Usuario usuario) { this.usuario = usuario; }

@@ -206,14 +206,11 @@
                 </div>
 
                 <%
-                    // 1. Instanciamos tu DAO de preguntas
                     PreguntaDAO preguntaDAO = new PreguntaDAO();
                     List<Pregunta> listaPreguntas = preguntaDAO.obtenerTodasLasPreguntas();
 
-                    // 2. Controlamos si hay registros en la base de datos
                     if (listaPreguntas != null && !listaPreguntas.isEmpty()) {
                         for (Pregunta p : listaPreguntas) {
-                            // Obtenemos el autor desde la relación de tu entidad
                             Usuario autor = p.getUsuario();
                             String nombreAutor = (autor != null) ? autor.getNombre() : "Anónimo";
                 %>
@@ -224,17 +221,32 @@
                                 </div>
                                 <div class="question-footer">
                                     <div class="tags">
-                                        <span class="tag">general</span>
+                                        <%
+                                            String tagsPlano = p.getEtiquetas(); 
+                                            if (tagsPlano != null && !tagsPlano.isEmpty()) {
+                                                String[] listaTags = tagsPlano.split(",");
+                                                for (String tag : listaTags) {
+                                        %>
+                                                    <span class="tag"><%= tag.trim() %></span>
+                                        <%
+                                                }
+                                            } else {
+                                        %>
+                                                <span class="tag">general</span>
+                                        <%
+                                            }
+                                        %>
                                     </div>
                                     <div>Por <span><%= nombreAutor %></span> • <%= p.getFechaCreacion() %></div>
                                 </div>
                             </div>
                 <%
                         }
-                    } else {
+                    }else{
                 %>
                         <div class="question-card" style="text-align: center; color: #94a3b8;">
-                            <div class="question-desc">No hay preguntas disponibles en este momento. ¡Sé el primero en publicar una duda!</div>
+                            <div class="question-desc">No hay preguntas disponibles en este momento. 
+                                ¡Sé el primero en publicar una duda!</div>
                         </div>
                 <%
                     }
@@ -254,4 +266,3 @@
         </div>
 
     </body>
-</html>

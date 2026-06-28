@@ -100,23 +100,55 @@
                 outline: none;
                 transition: all 0.2s;
             }
-            .input-group textarea { resize: vertical; min-height: 150px; font-family: inherit; }
-            .input-group input:focus, .input-group textarea:focus { border-color: #38bdf8; box-shadow: 0 0 0 1px #38bdf8; }
-
-            /* Botones de acción */
-            .actions-layout { display: flex; justify-content: flex-end; gap: 15px; margin-top: 25px; }
-            .btn {
-                padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none; transition: all 0.2s; border: none;
+            .input-group textarea { 
+                resize: vertical; 
+                min-height: 150px; 
+                font-family: inherit; 
             }
-            .btn-cancel { background: transparent; color: #94a3b8; border: 1px solid #334155; }
-            .btn-cancel:hover { background: rgba(148, 163, 184, 0.05); color: #f1f5f9; }
-            
-            .btn-submit { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: white; }
-            .btn-submit:hover { box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); }
+            .input-group input:focus, .input-group textarea:focus { 
+                border-color: #38bdf8; 
+                box-shadow: 0 0 0 1px #38bdf8; 
+            }
 
-            /* Animación de feedback por si acaso */
-            @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-            .error-shake { animation: shake 0.4s ease-in-out; border-color: #ef4444 !important; }
+            .actions-layout { 
+                display: flex; 
+                justify-content: flex-end; 
+                gap: 15px; margin-top: 25px; 
+            }
+            .btn {
+                padding: 12px 24px; 
+                border-radius: 8px; 
+                font-weight: 600; 
+                font-size: 0.95rem; 
+                cursor: pointer; 
+                text-decoration: none; 
+                transition: all 0.2s; 
+                border: none;
+            }
+            .btn-cancel { 
+                background: transparent; 
+                color: #94a3b8; 
+                border: 1px solid #334155; 
+            }
+            .btn-cancel:hover { 
+                background: rgba(148, 163, 184, 0.05); 
+                color: #f1f5f9; 
+            }
+            
+            .btn-submit { 
+                background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); 
+                color: white; 
+            }
+            .btn-submit:hover { 
+                box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); 
+            }
+
+            @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { 
+                        transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+            .error-shake { 
+                animation: shake 0.4s ease-in-out; 
+                border-color: #ef4444 !important; 
+            }
         </style>
     </head>
     <body>
@@ -135,14 +167,21 @@
 
                     <div class="input-group">
                         <label for="txtTitulo">Título del Hilo</label>
-                        <input type="text" id="txtTitulo" name="txtTitulo" placeholder="Ej. ¿Cómo inyectar un EntityManager en una clase DAO en JPA?" autocomplete="off">
+                        <input type="text" id="txtTitulo" name="txtTitulo" placeholder="Ej: ¿Cómo inyectar un EntityManager 
+                               en una clase DAO en JPA?" autocomplete="off">
                     </div>
 
                     <div class="input-group">
                         <label for="txtDescripcion">Detalle de la duda / Problema</label>
-                        <textarea id="txtDescripcion" name="txtDescripcion" placeholder="Introduce todo el contexto necesario, código de error o configuración que estés utilizando..."></textarea>
+                        <textarea id="txtDescripcion" name="txtDescripcion" placeholder="Introduce todo el contexto necesario,
+                                  código de error o configuración que estés utilizando..."></textarea>
                     </div>
-
+                    <div class="input-group">
+                        <label for="txtEtiquetas">Etiquetas (Separadas por comas)</label>
+                        <input type="text" id="txtEtiquetas" name="txtEtiquetas" placeholder="Ej: java, jpa, mysql" 
+                               autocomplete="off">
+                    </div>
+                    
                     <div class="actions-layout">
                         <a href="index.jsp" class="btn btn-cancel">Cancelar</a>
                         <button type="submit" class="btn btn-submit" id="btnPublish">Publicar en el Feed</button>

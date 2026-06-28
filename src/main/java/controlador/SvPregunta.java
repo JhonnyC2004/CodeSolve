@@ -39,17 +39,27 @@ public class SvPregunta extends HttpServlet {
             return;
         }
 
-        String titulo = request.getParameter("txtTitulo");
-        String descripcion = request.getParameter("txtDescripcion");
+           String titulo = request.getParameter("txtTitulo");
+           String descripcion = request.getParameter("txtDescripcion");
+
+           String etiquetasInput = request.getParameter("txtEtiquetas");
+        if (etiquetasInput == null || etiquetasInput.trim().isEmpty()) {
+           etiquetasInput = "general";
+        }else{
+           etiquetasInput = etiquetasInput.toLowerCase().trim();
+        }
 
         Pregunta nuevaPregunta = new Pregunta(titulo, descripcion, usuarioLogueado);
+        nuevaPregunta.setEtiquetas(etiquetasInput); // Seteamos los tags planos
+    
+        nuevaPregunta.setFechaCreacion(new java.util.Date()); 
 
         boolean exito = preguntaDAO.registrarPregunta(nuevaPregunta);
 
-        if (exito) {
-            response.sendRedirect("index.jsp?msg=pregunta_publicada");
-        } else {
-            response.sendRedirect("publicar.jsp?error=fallo_publicacion");
+        if(exito) {
+           response.sendRedirect("index.jsp?msg=pregunta_publicada");
+        }else{
+           response.sendRedirect("HacerPregunta.jsp?error=fallo_publicacion");
         }
     }
     @Override
