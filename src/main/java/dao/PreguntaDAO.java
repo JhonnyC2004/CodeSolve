@@ -35,6 +35,19 @@ public class PreguntaDAO {
                  .getResultList();
         }finally {
            em.close();
+        }
     }
-}
+    //listar por criterio
+    public List<Pregunta> buscarPreguntasPorCriterio(String criterio) {
+    EntityManager em = emf.createEntityManager();
+      try {
+        String jpql = "SELECT p FROM Pregunta p WHERE LOWER(p.titulo) LIKE :criterio OR LOWER(p.etiquetas) "
+                + "LIKE :criterio ORDER BY p.fechaCreacion DESC";
+        return em.createQuery(jpql, Pregunta.class)
+                 .setParameter("criterio", "%" + criterio.toLowerCase() + "%")
+                 .getResultList();
+      }finally {
+        em.close();
+      }
+    }
 }

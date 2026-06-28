@@ -205,9 +205,47 @@
                     <a href="HacerPregunta.jsp" class="btn-ask">Plantear Pregunta</a>
                 </div>
 
+                <div class="search-container" style="margin-bottom: 25px;">
+                    <form action="index.jsp" method="GET" style="display: flex; gap: 10px;">
+                        <input type="text" name="txtBuscar" placeholder="Buscar por título o etiqueta (ej: react)..." 
+                               value="<%= request.getParameter("txtBuscar") != null ? request.getParameter("txtBuscar") : "" %>"
+                               style="flex: 1; 
+                               background: #0f172a; 
+                               border: 1px solid #334155; 
+                               padding: 12px; 
+                               border-radius: 8px; 
+                               color: #f8fafc; 
+                               outline: none; 
+                               font-size: 0.95rem;">
+                        <button type="submit" style="background: #38bdf8; 
+                                color: #0f172a; 
+                                border: none; 
+                                padding: 12px 20px; 
+                                border-radius: 8px; 
+                                font-weight: 600; 
+                                cursor: pointer;">Buscar</button>
+                        <% if (request.getParameter("txtBuscar") != null && !request.getParameter("txtBuscar").trim().isEmpty()) {                         %>
+                            <a href="index.jsp" style="background: #334155; color: #cbd5e1; padding: 12px 15px; 
+                               border-radius: 8px; 
+                               text-decoration: none; 
+                               font-size: 0.95rem; 
+                               display: flex; 
+                               align-items: center;">Limpiar</a>
+                        <% } %>
+                    </form>
+                </div>
+
                 <%
                     PreguntaDAO preguntaDAO = new PreguntaDAO();
-                    List<Pregunta> listaPreguntas = preguntaDAO.obtenerTodasLasPreguntas();
+                    List<Pregunta> listaPreguntas;
+
+                    String buscar = request.getParameter("txtBuscar");
+
+                    if (buscar != null && !buscar.trim().isEmpty()) {
+                        listaPreguntas = preguntaDAO.buscarPreguntasPorCriterio(buscar.trim());
+                    } else {
+                        listaPreguntas = preguntaDAO.obtenerTodasLasPreguntas();
+                    }
 
                     if (listaPreguntas != null && !listaPreguntas.isEmpty()) {
                         for (Pregunta p : listaPreguntas) {
@@ -227,10 +265,11 @@
                                                 String[] listaTags = tagsPlano.split(",");
                                                 for (String tag : listaTags) {
                                         %>
-                                                    <span class="tag"><%= tag.trim() %></span>
+                                                    <a href="index.jsp?txtBuscar=<%= tag.trim() %>" class="tag" 
+                                                       style="text-decoration: none;"><%= tag.trim() %></a>
                                         <%
                                                 }
-                                            } else {
+                                            }else{
                                         %>
                                                 <span class="tag">general</span>
                                         <%
@@ -242,11 +281,10 @@
                             </div>
                 <%
                         }
-                    }else{
+                    } else {
                 %>
                         <div class="question-card" style="text-align: center; color: #94a3b8;">
-                            <div class="question-desc">No hay preguntas disponibles en este momento. 
-                                ¡Sé el primero en publicar una duda!</div>
+                            <div class="question-desc">No se encontraron preguntas que coincidan con tu búsqueda.</div>
                         </div>
                 <%
                     }
