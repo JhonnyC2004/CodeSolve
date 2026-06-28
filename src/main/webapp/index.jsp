@@ -4,6 +4,8 @@
     Author     : Jhonny Dev
 --%>
 
+<%@page import="java.util.Locale"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="jhonnydev.codesolve.modelo.Usuario"%>
 <%@page import="jhonnydev.codesolve.modelo.Pregunta"%>
 <%@page import="dao.PreguntaDAO"%>
@@ -16,6 +18,7 @@
         response.sendRedirect("Login.jsp?msg=inicia_sesion");
         return; 
     }
+    SimpleDateFormat sdfEspanol = new SimpleDateFormat("dd 'de' MMM. 'de' yyyy", new Locale("es", "EC"));
 %>
 <!DOCTYPE html>
 <html lang="es">
@@ -89,17 +92,54 @@
                 margin-bottom: 10px;
             }
             .btn-ask {
-                background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-                color: white; 
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+                color: black; 
                 text-decoration: none; 
                 padding: 10px 18px;
                 border-radius: 8px; 
                 font-weight: 600; 
                 font-size: 0.9rem;
-                transition: box-shadow 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                transition: transform 0.2s, box-shadow 0.2s;
             }
             .btn-ask:hover { 
-                box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); 
+                box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); 
+                transform: translateY(-1px); 
+            }
+            .btn-search {
+                background: #1e293b;
+                color: #cbd5e1;
+                border: 1px solid #475569;
+                padding: 10px 18px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 0.9rem;
+                cursor: pointer;
+                transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+            }
+            .btn-search:hover {
+                background: #334155; 
+                border-color: #94a3b8;
+                color: #f8fafc;
+            }
+            .btn-clear {
+                background: #334155;
+                color: #cbd5e1;
+                padding: 10px 15px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-size: 0.95rem;
+                display: flex;
+                align-items: center;
+                font-weight: 600;
+                transition: background-color 0.2s, color 0.2s;
+            }
+
+            .btn-clear:hover {
+                background: #475569;
+                color: #f8fafc;
             }
 
             .question-card {
@@ -209,28 +249,13 @@
                     <form action="index.jsp" method="GET" style="display: flex; gap: 10px;">
                         <input type="text" name="txtBuscar" placeholder="Buscar por título o etiqueta (ej: react)..." 
                                value="<%= request.getParameter("txtBuscar") != null ? request.getParameter("txtBuscar") : "" %>"
-                               style="flex: 1; 
-                               background: #0f172a; 
-                               border: 1px solid #334155; 
-                               padding: 12px; 
-                               border-radius: 8px; 
-                               color: #f8fafc; 
-                               outline: none; 
-                               font-size: 0.95rem;">
-                        <button type="submit" style="background: #38bdf8; 
-                                color: #0f172a; 
-                                border: none; 
-                                padding: 12px 20px; 
-                                border-radius: 8px; 
-                                font-weight: 600; 
-                                cursor: pointer;">Buscar</button>
+                               style="flex: 1; background: #0f172a; border: 1px solid #334155; padding: 12px; 
+                               border-radius: 8px; color: #f8fafc; outline: none; font-size: 0.95rem;">
+                        
+                        <button type="submit" class="btn-search">Buscar</button>
+                        
                         <% if (request.getParameter("txtBuscar") != null && !request.getParameter("txtBuscar").trim().isEmpty()) {                         %>
-                            <a href="index.jsp" style="background: #334155; color: #cbd5e1; padding: 12px 15px; 
-                               border-radius: 8px; 
-                               text-decoration: none; 
-                               font-size: 0.95rem; 
-                               display: flex; 
-                               align-items: center;">Limpiar</a>
+                            <a href="index.jsp" class="btn-clear">Limpiar</a>
                         <% } %>
                     </form>
                 </div>
@@ -252,37 +277,51 @@
                             Usuario autor = p.getUsuario();
                             String nombreAutor = (autor != null) ? autor.getNombre() : "Anónimo";
                 %>
-                            <div class="question-card">
-                                <div class="question-title">
-                                   <a href="DetallePregunta.jsp?id=<%= p.getIdPregunta() %>" style="color: #38bdf8; 
-                                   text-decoration: none; font-weight: 600;"><%= p.getTitulo() %></a>
+                            <div class="question-card" style="position: relative;">
+                                <%
+                                    int totalRespuestas = (p.getListaRespuestas() != null) ? p.getListaRespuestas().size() : 0;
+                                %>
+                                <div class="answers-badge" style="position: absolute; top: 20px; 
+                                     right: 20px; background: #1e293b; border: 1px solid #334155; padding: 6px 12px; 
+                                     border-radius: 20px; text-align: center; min-width: 70px;">
+                                    <span style="display: block; font-size: 1.1rem; font-weight: 700; 
+                                          color: #38bdf8;"><%= totalRespuestas %></span>
+                                    <span style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; 
+                                          letter-spacing: 0.5px;">respuestas</span>
                                 </div>
-                                <div class="question-desc">
-                                    <%= p.getDescripcion() %>
-                                </div>
-                                <div class="question-footer">
-                                    <div class="tags">
-                                    <%
-                                      String tagsPlano = p.getEtiquetas(); 
-                                      int totalRespuestas = (p.getListaRespuestas() != null) ? p.getListaRespuestas().size() : 0;
 
-                                      if (tagsPlano != null && !tagsPlano.isEmpty()) {
-                                          String[] listaTags = tagsPlano.split(",");
-                                          for (String tag : listaTags) {
-                                    %>
-                                      <a href="index.jsp?txtBuscar=<%= tag.trim() %>" class="tag" style="text-decoration: none;">
-                                      <%= tag.trim() %> (<%= totalRespuestas %>)
-                                      </a>
-                                    <%
-                                          }
-                                      }else{
-                                      %>
-                                      <span class="tag">general (<%= totalRespuestas %>)</span>
-                                      <%
-                                      }
-                                    %>
-                                    </div> 
-                                         <div>Por <span><%= nombreAutor %></span> • <%= p.getFechaCreacion() %></div>
+                                <div style="padding-right: 90px;">
+                                    <div class="question-title">
+                                        <a href="DetallePregunta.jsp?id=<%= p.getIdPregunta() %>" style="color: #38bdf8; 
+                                           text-decoration: none; font-weight: 600;"><%= p.getTitulo() %></a>
+                                    </div>
+                                    <div class="question-desc">
+                                        <%= p.getDescripcion() %>
+                                    </div>
+                                </div>
+
+                                <div class="question-footer" style="margin-top: 15px;">
+                                    <div class="tags">
+                                        <%
+                                            String tagsPlano = p.getEtiquetas(); 
+                                            if (tagsPlano != null && !tagsPlano.isEmpty()) {
+                                                String[] listaTags = tagsPlano.split(",");
+                                                for (String tag : listaTags) {
+                                        %>
+                                                    <a href="index.jsp?txtBuscar=<%= tag.trim() %>" class="tag" 
+                                                       style="text-decoration: none;"><%= tag.trim() %></a>
+                                        <%
+                                                }
+                                            } else {
+                                        %>
+                                                <span class="tag">general</span>
+                                        <%
+                                            }
+                                        %>
+                                    </div>
+                                    <div style="color: #94a3b8; font-size: 0.85rem;">Por <span><%= nombreAutor %>
+                                        </span> • <%= p.getFechaCreacion() != null ? sdfEspanol.format
+                                                (p.getFechaCreacion()) : "Reciente" %></div>
                                 </div>
                             </div>
                 <%
@@ -300,10 +339,19 @@
 
             <aside class="sidebar">
                 <h3>Estadísticas de la Comunidad</h3>
+                <%
+                    dao.RespuestaDAO respuestaDAOStats = new dao.RespuestaDAO();
+                    dao.UsuarioDAO usuarioDAOStats = new dao.UsuarioDAO(); 
+                    
+                    long respuestasTotales = respuestaDAOStats.contarRespuestasTotales();
+                    long desarrolladoresTotales = usuarioDAOStats.contarUsuariosTotales();
+                %>
                 <ul class="stats-list">
                     <li>Preguntas totales: <span><%= (listaPreguntas != null) ? listaPreguntas.size() : 0 %></span></li>
-                    <li>Respuestas activas: <span>0</span></li>
-                    <li>Desarrolladores: <span>1</span></li>
+                    
+                    <li>Respuestas activas: <span><%= respuestasTotales %></span></li>
+                    
+                    <li>Desarrolladores: <span><%= desarrolladoresTotales %></span></li>
                 </ul>
             </aside>
 

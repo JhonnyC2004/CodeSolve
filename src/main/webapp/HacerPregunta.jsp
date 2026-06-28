@@ -137,7 +137,7 @@
             
             .btn-submit { 
                 background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); 
-                color: white; 
+                color: black; 
             }
             .btn-submit:hover { 
                 box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); 
@@ -167,14 +167,14 @@
 
                     <div class="input-group">
                         <label for="txtTitulo">Título del Hilo</label>
-                        <input type="text" id="txtTitulo" name="txtTitulo" placeholder="Ej: ¿Cómo inyectar un EntityManager 
-                               en una clase DAO en JPA?" autocomplete="off">
+                        <input type="text" id="txtTitulo" name="txtTitulo" 
+                               placeholder="Ej: ¿Cómo inyectar un EntityManager en una clase DAO en JPA?" autocomplete="off">
                     </div>
 
                     <div class="input-group">
                         <label for="txtDescripcion">Detalle de la duda / Problema</label>
-                        <textarea id="txtDescripcion" name="txtDescripcion" placeholder="Introduce todo el contexto necesario,
-                                  código de error o configuración que estés utilizando..."></textarea>
+                        <textarea id="txtDescripcion" name="txtDescripcion" 
+                                  placeholder="Introduce todo el contexto necesario, código de error o configuración que estés utilizando..."></textarea>
                     </div>
                     <div class="input-group">
                         <label for="txtEtiquetas">Etiquetas (Separadas por comas)</label>

@@ -49,4 +49,16 @@ public class UsuarioDAO {
             em.close();
         }
     }
+    
+    public long contarUsuariosTotales() {
+        EntityManager em = emf.createEntityManager();
+        try {
+           String jpql = "SELECT COUNT(u) FROM Usuario u";
+           return em.createQuery(jpql, Long.class).getSingleResult();
+        }catch (Exception e) {
+           return 0;
+        }finally {
+        em.close();
+       }
+    }
 }

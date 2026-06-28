@@ -54,9 +54,13 @@ public class PreguntaDAO {
     public Pregunta buscarPreguntaPorId(int id) {
     EntityManager em = emf.createEntityManager();
     try {
-        return em.find(Pregunta.class, id);
-    } finally {
+        Pregunta p = em.find(Pregunta.class, id);
+        if (p != null) {
+            em.refresh(p); 
+        }
+        return p;
+    }finally {
         em.close();
     }
-}
+    }
 }

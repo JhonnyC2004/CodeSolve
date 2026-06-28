@@ -46,7 +46,7 @@ public class Pregunta {
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;
     
-    @OneToMany(mappedBy = "pregunta", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pregunta", fetch = FetchType.EAGER)
     private List<Respuesta> listaRespuestas;
 
     public Pregunta() {

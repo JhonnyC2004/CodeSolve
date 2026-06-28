@@ -39,4 +39,16 @@ public class RespuestaDAO {
             em.close();
         }
     }
+    
+    public long contarRespuestasTotales() {
+    EntityManager em = emf.createEntityManager();
+        try {
+          String jpql = "SELECT COUNT(r) FROM Respuesta r";
+          return em.createQuery(jpql, Long.class).getSingleResult();
+        } catch (Exception e) {
+          return 0;
+        } finally {
+        em.close();
+        }
+    }
 }
