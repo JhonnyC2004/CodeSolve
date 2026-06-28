@@ -28,14 +28,13 @@ public class PreguntaDAO {
     }
 
     //listar todas las preguntas para el Home
-    public List<Pregunta> listarPreguntas() {
-        EntityManager em = emf.createEntityManager();
+    public List<Pregunta> obtenerTodasLasPreguntas() {
+        EntityManager em = emf.createEntityManager(); 
         try {
-            //traer las preguntas mas recientes
-            String jpql = "SELECT p FROM Pregunta p ORDER BY p.idPregunta DESC";
-            return em.createQuery(jpql, Pregunta.class).getResultList();
-        } finally {
-            em.close();
-        }
+        return em.createQuery("SELECT p FROM Pregunta p ORDER BY p.fechaCreacion DESC", Pregunta.class)
+                 .getResultList();
+        }finally {
+           em.close();
     }
+}
 }

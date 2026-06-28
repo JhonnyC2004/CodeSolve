@@ -4,8 +4,19 @@
     Author     : Jhonny Dev
 --%>
 
-<%@page import="jhonnydev.codesolve.modelo.Usuario"%> 
+<%@page import="jhonnydev.codesolve.modelo.Usuario"%>
+<%@page import="jhonnydev.codesolve.modelo.Pregunta"%>
+<%@page import="dao.PreguntaDAO"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+    HttpSession checkSession = request.getSession(false);
+    if (checkSession == null || checkSession.getAttribute("usuarioLogueado") == null) {
+        response.sendRedirect("Login.jsp?msg=inicia_sesion");
+        return; 
+    }
+%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -191,43 +202,50 @@
             <main class="feed-section">
                 <div class="feed-header">
                     <h2>Todas las Preguntas</h2>
-                    <a href="hacer-pregunta.jsp" class="btn-ask">Plantear Pregunta</a>
+                    <a href="HacerPregunta.jsp" class="btn-ask">Plantear Pregunta</a>
                 </div>
 
-                <div class="question-card">
-                    <div class="question-title">¿Cómo solucionar el error ExceptionInInitializerError en módulos de Java?</div>
-                    <div class="question-desc">
-                        Estoy intentando compilar un empaquetado WAR usando Maven en una versión de JDK superior a la 11, pero el compilador colapsa indicando problemas de acceso reflejado en java.base...
-                    </div>
-                    <div class="question-footer">
-                        <div class="tags">
-                            <span class="tag">java</span>
-                            <span class="tag">maven</span>
-                        </div>
-                        <div>Por <span>Jhonny Coello</span> • Hace 10 min</div>
-                    </div>
-                </div>
+                <%
+                    // 1. Instanciamos tu DAO de preguntas
+                    PreguntaDAO preguntaDAO = new PreguntaDAO();
+                    List<Pregunta> listaPreguntas = preguntaDAO.obtenerTodasLasPreguntas();
 
-                <div class="question-card">
-                    <div class="question-title">Duda sobre la configuración correcta de persistence.xml en JPA</div>
-                    <div class="question-desc">
-                        ¿Es obligatorio definir las clases entidad explícitamente dentro de la etiqueta class o el proveedor EclipseLink las mapea automáticamente al escanear el proyecto?
-                    </div>
-                    <div class="question-footer">
-                        <div class="tags">
-                            <span class="tag">jpa</span>
-                            <span class="tag">mysql</span>
+                    // 2. Controlamos si hay registros en la base de datos
+                    if (listaPreguntas != null && !listaPreguntas.isEmpty()) {
+                        for (Pregunta p : listaPreguntas) {
+                            // Obtenemos el autor desde la relación de tu entidad
+                            Usuario autor = p.getUsuario();
+                            String nombreAutor = (autor != null) ? autor.getNombre() : "Anónimo";
+                %>
+                            <div class="question-card">
+                                <div class="question-title"><%= p.getTitulo() %></div>
+                                <div class="question-desc">
+                                    <%= p.getDescripcion() %>
+                                </div>
+                                <div class="question-footer">
+                                    <div class="tags">
+                                        <span class="tag">general</span>
+                                    </div>
+                                    <div>Por <span><%= nombreAutor %></span> • <%= p.getFechaCreacion() %></div>
+                                </div>
+                            </div>
+                <%
+                        }
+                    } else {
+                %>
+                        <div class="question-card" style="text-align: center; color: #94a3b8;">
+                            <div class="question-desc">No hay preguntas disponibles en este momento. ¡Sé el primero en publicar una duda!</div>
                         </div>
-                        <div>Por <span>Anónimo</span> • Hace 2 horas</div>
-                    </div>
-                </div>
+                <%
+                    }
+                %>
 
             </main>
 
             <aside class="sidebar">
                 <h3>Estadísticas de la Comunidad</h3>
                 <ul class="stats-list">
-                    <li>Preguntas totales: <span>2</span></li>
+                    <li>Preguntas totales: <span><%= (listaPreguntas != null) ? listaPreguntas.size() : 0 %></span></li>
                     <li>Respuestas activas: <span>0</span></li>
                     <li>Desarrolladores: <span>1</span></li>
                 </ul>
