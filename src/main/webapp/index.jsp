@@ -4,6 +4,7 @@
     Author     : Jhonny Dev
 --%>
 
+<%@page import="jhonnydev.codesolve.modelo.Usuario"%> 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -169,11 +170,20 @@
     <body>
 
         <nav class="navbar">
-            <h1>CodeSolve</h1>
-            <div class="user-menu">
-                <span>Hola, <strong style="color: #38bdf8;">Dev</strong></span>
-                <a href="LogoutServlet" class="btn-logout">Cerrar Sesión</a>
-            </div>
+          <h1>CodeSolve</h1>
+          <div class="user-menu">
+          <%
+            HttpSession misession = request.getSession(false);
+            String nombreMostrar = "Invitado";
+
+            if (misession != null && misession.getAttribute("usuarioLogueado") != null) {
+                Usuario uLogueado = (Usuario) misession.getAttribute("usuarioLogueado");
+                nombreMostrar = uLogueado.getNombre(); 
+            }
+          %>
+           <span>Bienvenido, <strong style="color: #38bdf8;"><%= nombreMostrar %></strong></span>
+           <a href="SvLogout" class="btn-logout">Cerrar Sesión</a>
+          </div>
         </nav>
 
         <div class="main-container">

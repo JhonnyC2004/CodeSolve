@@ -154,14 +154,13 @@
             <p>Bienvenido de vuelta, desarrollador.</p>
         </div>
         
-        <%-- Capturar errores devueltos por el servlet o sesiones expiradas --%>
         <% if (request.getParameter("error") != null) { %>
             <div class="alert-error">
                 <strong>¡Acceso Denegado!</strong> Credenciales inválidas o sesión expirada.
             </div>
         <% } %>
 
-        <form action="UsuarioServlet" method="POST" id="loginForm">
+        <form action="SvUsuario" method="POST" id="loginForm">
             
             <input type="hidden" name="accion" value="login">
             
@@ -204,7 +203,6 @@
             return esValido;
         }
 
-        // Validación en tiempo real para el login
         email.addEventListener('input', () => {
             marcarInput(email, emailRegex.test(email.value.trim()));
         });
@@ -213,7 +211,6 @@
             marcarInput(password, password.value.length >= 6);
         });
 
-        // Interceptar submit
         form.addEventListener('submit', function(e) {
             const v1 = marcarInput(email, emailRegex.test(email.value.trim()));
             const v2 = marcarInput(password, password.value.length >= 6);

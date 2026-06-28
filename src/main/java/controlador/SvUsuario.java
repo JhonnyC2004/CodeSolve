@@ -5,13 +5,14 @@ import dao.UsuarioDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import jhonnydev.codesolve.modelo.Usuario;
 
-
+@WebServlet(name = "SvUsuario", urlPatterns = {"/SvUsuario"})
 public class SvUsuario extends HttpServlet {
    
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -24,21 +25,32 @@ public class SvUsuario extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        //  el usuario dio clic en Login o Registro?
+        
         String accion = request.getParameter("accion");
 
-        if (accion != null) {
-            switch (accion) {
-                case "registrar":
-                    procesarRegistro(request, response);
-                    break;
-                case "login":
-                    procesarLogin(request, response);
-                    break;
+        System.out.println("----SVUSUARIO----");
+        System.out.println("Accion recibida: [" + accion + "]");
+
+        if(accion != null) {
+        switch (accion) {
+            case "registrar":
+                System.out.println("-> Entrando a procesarRegistro...");
+                procesarRegistro(request, response);
+                break;
+            case "login":
+                System.out.println("-> Entrando a procesarLogin...");
+                procesarLogin(request, response);
+                break;
+            default:
+                System.out.println("-> ADVERTENCIA: accion desconocida, redirigiendo a index");
+                response.sendRedirect("index.jsp");
+                break;
             }
+        }else{
+        System.out.println("-> ERROR: NULL, redirigiendo a login...");
+        response.sendRedirect("login.jsp");
         }
     }
-    
     @Override
     public String getServletInfo() {
         return "Short description";
@@ -57,9 +69,9 @@ public class SvUsuario extends HttpServlet {
         boolean exito = usuarioDAO.registrarUsuario(nuevoUsuario);
 
         if (exito) {
-            response.sendRedirect("login.jsp?msg=registrado");
+            response.sendRedirect("Login.jsp?msg=registrado");
         } else {
-            response.sendRedirect("registro.jsp?error=error_registro");
+            response.sendRedirect("Registro.jsp?error=error_registro");
         }
     }
 
@@ -79,7 +91,7 @@ public class SvUsuario extends HttpServlet {
             response.sendRedirect("index.jsp");
         } else {
             
-            response.sendRedirect("login.jsp?error=datos_incorrectos");
+            response.sendRedirect("Login.jsp?error=datos_incorrectos");
         }
     }
 }

@@ -156,7 +156,7 @@
             </div>
         <% } %>
 
-        <form action="UsuarioServlet" method="POST" id="registerForm">
+        <form action="SvUsuario" method="POST" id="registerForm">
             
             <input type="hidden" name="accion" value="registrar">
             
