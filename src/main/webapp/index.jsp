@@ -414,7 +414,7 @@
                 <%
                     Usuario userStats = (Usuario) session.getAttribute("usuarioLogueado");
                     if (userStats != null) {
-                        // Consultamos los aportes reales del usuario en la base de datos
+
                         long misPreguntas = preguntaDAO.contarPreguntasPorUsuario(userStats.getIdUsuario());
                         long misRespuestas = respuestaDAOStats.contarRespuestasPorUsuario(userStats.getIdUsuario());
                 %>

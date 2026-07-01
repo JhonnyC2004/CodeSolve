@@ -76,7 +76,7 @@ public class SvEditElimPregunta extends HttpServlet {
             PreguntaDAO pDAO = new PreguntaDAO();
             Pregunta p = pDAO.buscarPreguntaPorId(idPregunta);
 
-            // Verificacion de usuario que comento para editar
+            // verificacion de usuario que comento para editar
             if (p != null && p.getUsuario().getIdUsuario() == usuarioLogueado.getIdUsuario()) {
                 p.setTitulo(nuevoTitulo.trim());
                 p.setDescripcion(nuevaDesc.trim());

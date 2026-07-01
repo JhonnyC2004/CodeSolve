@@ -99,13 +99,13 @@ public class RespuestaDAO {
     }
     
     public long contarRespuestasPorUsuario(int idUsuario) {
-    EntityManager em = emf.createEntityManager();
-    try {
-        return em.createQuery("SELECT COUNT(r) FROM Respuesta r WHERE r.usuario.idUsuario = :id", Long.class)
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(r) FROM Respuesta r WHERE r.usuario.idUsuario = :id", Long.class)
                  .setParameter("id", idUsuario)
                  .getSingleResult();
-    } finally {
+        } finally {
         em.close();
+        }
     }
-}
 }

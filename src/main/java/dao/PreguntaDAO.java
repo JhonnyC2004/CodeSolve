@@ -39,74 +39,73 @@ public class PreguntaDAO {
     }
     //listar por criterio
     public List<Pregunta> buscarPreguntasPorCriterio(String criterio) {
-    EntityManager em = emf.createEntityManager();
-      try {
-        String jpql = "SELECT p FROM Pregunta p WHERE LOWER(p.titulo) LIKE :criterio OR LOWER(p.etiquetas) "
+        EntityManager em = emf.createEntityManager();
+        try {
+            String jpql = "SELECT p FROM Pregunta p WHERE LOWER(p.titulo) LIKE :criterio OR LOWER(p.etiquetas) "
                 + "LIKE :criterio ORDER BY p.fechaCreacion DESC";
         return em.createQuery(jpql, Pregunta.class)
                  .setParameter("criterio", "%" + criterio.toLowerCase() + "%")
                  .getResultList();
-      }finally {
+        }finally {
         em.close();
-      }
+        }
     }
     //busqueda para facilitar la respuesta
     public Pregunta buscarPreguntaPorId(int id) {
-    EntityManager em = emf.createEntityManager();
-    try {
-        Pregunta p = em.find(Pregunta.class, id);
-        if (p != null) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Pregunta p = em.find(Pregunta.class, id);
+            if (p != null) {
             em.refresh(p); 
-        }
+            }
         return p;
-    }finally {
+        }finally {
         em.close();
-    }
+        }
     }
     //editar pregunta
     public boolean editarPregunta(Pregunta pregunta) {
-    EntityManager em = emf.createEntityManager();
-    try {
-        em.getTransaction().begin();
-        em.merge(pregunta); // merge actualiza el registro mapeado por su ID
-        em.getTransaction().commit();
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(pregunta); 
+            em.getTransaction().commit();
         return true;
-    } catch (Exception e) {
-        if (em.getTransaction().isActive()) em.getTransaction().rollback();
+        }catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
         return false;
-    } finally {
+        }finally {
         em.close();
-    }
+        }
     }
     //eliminar pregunta
     public boolean eliminarPregunta(int idPregunta) {
-    EntityManager em = emf.createEntityManager();
-    try {
-        em.getTransaction().begin();
-        // En JPA, primero debemos buscar el objeto en el contexto actual para poder borrarlo
-        Pregunta p = em.find(Pregunta.class, idPregunta);
-        if (p != null) {
-            em.remove(p);
-            em.getTransaction().commit();
-            return true;
-        }
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Pregunta p = em.find(Pregunta.class, idPregunta);
+            if (p != null) {
+               em.remove(p);
+               em.getTransaction().commit();
+               return true;
+            }
         return false;
-    } catch (Exception e) {
-        if (em.getTransaction().isActive()) em.getTransaction().rollback();
+        }catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
         return false;
-    } finally {
+        }finally {
         em.close();
-    }
+        }
     }
     
     public long contarPreguntasPorUsuario(int idUsuario) {
-    EntityManager em = emf.createEntityManager();
-    try {
-        return em.createQuery("SELECT COUNT(p) FROM Pregunta p WHERE p.usuario.idUsuario = :id", Long.class)
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.createQuery("SELECT COUNT(p) FROM Pregunta p WHERE p.usuario.idUsuario = :id", Long.class)
                  .setParameter("id", idUsuario)
                  .getSingleResult();
-    } finally {
+        }finally {
         em.close();
+        }
     }
-}
 }
