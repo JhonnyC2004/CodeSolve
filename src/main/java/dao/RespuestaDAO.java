@@ -51,4 +51,50 @@ public class RespuestaDAO {
         em.close();
         }
     }
+    //editar respuesta
+    public boolean editarRespuesta(Respuesta respuesta) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(respuesta);
+            em.getTransaction().commit();
+            return true;
+        }catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            return false;
+        }finally {
+            em.close();
+        }
+    }
+    //eliminar respuesta
+    public boolean eliminarRespuesta(int idRespuesta) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Respuesta r = em.find(Respuesta.class, idRespuesta);
+            if(r != null) {
+                em.remove(r);
+                em.getTransaction().commit();
+                return true;
+            }
+            return false;
+        }catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            return false;
+        }finally {
+        em.close();
+        }
+    }
+    //buscar por id
+    public Respuesta buscarRespuestaPorId(int idRespuesta) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            return em.find(Respuesta.class, idRespuesta);
+        }catch (Exception e) {
+            System.out.println("Error al buscar respuesta por ID: " + e.getMessage());
+        return null;
+        }finally {
+        em.close();
+        }
+    }
 }

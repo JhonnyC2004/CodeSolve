@@ -41,7 +41,7 @@ public class SvEditElimPregunta extends HttpServlet {
             PreguntaDAO pDAO = new PreguntaDAO();
             Pregunta p = pDAO.buscarPreguntaPorId(idPregunta);
 
-            // Verificación de seguridad: ¿El que borra es el dueño?
+            // Verificacion de usuario que comento para eliminar
             if (p != null && p.getUsuario().getIdUsuario() == usuarioLogueado.getIdUsuario()) {
                 pDAO.eliminarPregunta(idPregunta);
                 response.sendRedirect("index.jsp?msg=pregunta_eliminada");
@@ -76,7 +76,7 @@ public class SvEditElimPregunta extends HttpServlet {
             PreguntaDAO pDAO = new PreguntaDAO();
             Pregunta p = pDAO.buscarPreguntaPorId(idPregunta);
 
-            // Verificación de seguridad: ¿El que edita es el dueño?
+            // Verificacion de usuario que comento para editar
             if (p != null && p.getUsuario().getIdUsuario() == usuarioLogueado.getIdUsuario()) {
                 p.setTitulo(nuevoTitulo.trim());
                 p.setDescripcion(nuevaDesc.trim());

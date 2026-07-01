@@ -319,7 +319,7 @@
                                             }
                                         %>
                                     </div>
-                                    <div style="color: #94a3b8; font-size: 0.85rem;">Por <span><%= nombreAutor %>
+                                        <div style="color: #94a3b8; font-size: 0.85rem;">Por <span><strong><%= nombreAutor %></strong>
                                         </span> • <%= p.getFechaCreacion() != null ? sdfEspanol.format
                                                 (p.getFechaCreacion()) : "Reciente" %></div>
                                 </div>

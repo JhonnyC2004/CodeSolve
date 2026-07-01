@@ -218,10 +218,10 @@
                 padding-bottom: 10px; 
             }
             .answer-card { 
-                background: #111827; 
+                background: #1e293b; 
                 border-left: 4px solid #38bdf8; 
                 padding: 20px; 
-                border-radius: 4px 8px 8px 4px; 
+                border-radius: 10px; 
                 margin-bottom: 15px; 
             }
             .answer-content { 
@@ -352,7 +352,7 @@
                         
                         <div style="display: flex; gap: 12px;">
                             <button type="submit" class="btn-reply" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Guardar Cambios</button>
-                            <button type="button" class="btn-search" onclick="cancelarEdicion();" style="background: #334155; border-color: #475569;">Cancelar</button>
+                            <button type="button" class="btn-back" onclick="cancelarEdicion();" >Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -379,19 +379,46 @@
                             Usuario autorRespuesta = r.getUsuario();
                             String nombreAutorR = (autorRespuesta != null) ? autorRespuesta.getNombre() : "Anónimo";
                 %>
-                            <div class="answer-card">
+                            <div id="vistaRespuesta_<%= r.getIdRespuesta() %>" class="answer-card">
                                 <div class="answer-content"><%= r.getContenido() %></div>
-                                <div class="answer-meta">Respondido por <strong><%= nombreAutorR %>
-                                    </strong> • <%= r.getFechaCreacion() != null ? sdfEspanol.format
-                                            (r.getFechaCreacion()) : "Reciente" %></div>
+                                <div class="answer-meta" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>Respondido por <strong><%= nombreAutorR %></strong> • <%= r.getFechaCreacion() != null ? sdfEspanol.format(r.getFechaCreacion()) : "Reciente" %></div>
+                                    
+                                    <% if (userLog != null && autorRespuesta != null && userLog.getIdUsuario() == autorRespuesta.getIdUsuario()) { %>
+                                        <div style="display: flex; gap: 15px;">
+                                            <a href="javascript:void(0);" onclick="activarEdicionRespuesta(<%= r.getIdRespuesta() %>);" class="btn-action-edit">Editar</a>
+                                            <a href="./SvEditElimRespuesta?id=<%= r.getIdRespuesta() %>&idPregunta=<%= pregunta.getIdPregunta() %>" 
+   onclick="return confirm('¿Seguro que deseas eliminar tu respuesta?');" class="btn-action-delete">Eliminar
+</a>
+                                        </div>
+                                    <% } %>
+                                </div>
                             </div>
+
+                            <% if (userLog != null && autorRespuesta != null && userLog.getIdUsuario() == autorRespuesta.getIdUsuario()) { %>
+                                <div id="formEdicionRespuesta_<%= r.getIdRespuesta() %>" class="answer-card" style="display: none; background: #1e293b; border-color: #475569;">
+                                    <h4 style="color: #f1f5f9; margin-top: 0; margin-bottom: 12px; font-size: 1.1rem;">Editar tu respuesta</h4>
+                                    <form action="SvEditElimRespuesta" method="POST">
+                                        <input type="hidden" name="idRespuesta" value="<%= r.getIdRespuesta() %>">
+                                        <input type="hidden" name="idPregunta" value="<%= pregunta.getIdPregunta() %>">
+                                        
+                                        <div class="edit-form-group" style="margin-bottom: 12px;">
+                                            <textarea name="txtContenido" required style="min-height: 100px;"><%= r.getContenido() %></textarea>
+                                        </div>
+                                        
+                                        <div style="display: flex; gap: 10px;">
+                                            <button type="submit" class="btn-reply" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.88rem;">Guardar</button>
+                                            <button type="button" onclick="cancelarEdicionRespuesta(<%= r.getIdRespuesta() %>);" style="background: #334155; color: #cbd5e1; border: 1px solid #475569; padding: 8px 16px; border-radius: 6px; font-size: 0.88rem; cursor: pointer;">Cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            <% } %>
                 <%
                         }
-                    }else {
+                    } else {
                 %>
                         <div class="answer-card" style="border-left-color: #64748b; background: #0f172a;">
-                            <div class="answer-content" style="color: #94a3b8; text-align: center;">Aún no hay respuestas 
-                                para esta duda. ¡Comparte tu conocimiento abajo!</div>
+                            <div class="answer-content" style="color: #94a3b8; text-align: center;">Aún no hay respuestas para esta duda. ¡Comparte tu conocimiento abajo!</div>
                         </div>
                 <%
                     }
@@ -401,13 +428,32 @@
                     <h4>Tu Respuesta</h4>
                     <form action="SvRespuesta" method="POST" class="reply-form">
                         <input type="hidden" name="idPregunta" value="<%= pregunta.getIdPregunta() %>">
-                        
                         <textarea name="txtContenido" placeholder="Escribe tu solución detallada o comparte un fragmento de código..." required></textarea>
                         <button type="submit" class="btn-reply">Publicar Respuesta</button>
                     </form>
                 </div>
             </div>
-        </div>
 
     </body>
+    <script>
+    // Control de la Pregunta Principal
+    function activarEdicion() {
+        document.getElementById('vistaPregunta').style.display = 'none';
+        document.getElementById('formEdicionPregunta').style.display = 'block';
+    }
+    function cancelarEdicion() {
+        document.getElementById('formEdicionPregunta').style.display = 'none';
+        document.getElementById('vistaPregunta').style.display = 'block';
+    }
+
+    // Control Dinámico de cada Respuesta usando su ID único
+    function activarEdicionRespuesta(id) {
+        document.getElementById('vistaRespuesta_' + id).style.display = 'none';
+        document.getElementById('formEdicionRespuesta_' + id).style.display = 'block';
+    }
+    function cancelarEdicionRespuesta(id) {
+        document.getElementById('formEdicionRespuesta_' + id).style.display = 'none';
+        document.getElementById('vistaRespuesta_' + id).style.display = 'block';
+    }
+</script>
 </html>
