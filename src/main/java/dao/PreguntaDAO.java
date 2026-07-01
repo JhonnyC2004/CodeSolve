@@ -97,5 +97,16 @@ public class PreguntaDAO {
     } finally {
         em.close();
     }
+    }
+    
+    public long contarPreguntasPorUsuario(int idUsuario) {
+    EntityManager em = emf.createEntityManager();
+    try {
+        return em.createQuery("SELECT COUNT(p) FROM Pregunta p WHERE p.usuario.idUsuario = :id", Long.class)
+                 .setParameter("id", idUsuario)
+                 .getSingleResult();
+    } finally {
+        em.close();
+    }
 }
 }

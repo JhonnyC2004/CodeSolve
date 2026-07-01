@@ -31,15 +31,24 @@
                 box-sizing: border-box; 
                 margin: 0; 
                 padding: 0; 
-                font-family: 'Segoe UI', sans-serif; 
-            }
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+              }
             body { 
-                background-color: #0f172a; 
-                color: #f8fafc; 
-                background-image: linear-gradient(rgba(248, 250, 252, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba                     (248, 250, 252, 0.02) 1px, transparent 1px);
-                background-size: 30px 30px;
+                background-color: #0f172a;
+                background-image: linear-gradient(rgba(248, 250, 252, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(248, 250, 252, 0.03) 1px, transparent 1px);
+                background-size: 40px 40px; 
+                color: #f8fafc;
+                min-height: 100vh;
             }
 
+            .main-wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: calc(100vh - 70px); 
+            }
             .navbar {
                 background: #1e293b;
                 padding: 15px 30px;
@@ -141,6 +150,56 @@
                 background: #475569;
                 color: #f8fafc;
             }
+            
+            .user-stats-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px; /* Separación respecto a las estadísticas de la comunidad */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.user-stats-card h3 {
+    color: #38bdf8; /* Azul CodeSolve */
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-stats-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.user-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #334155;
+}
+
+.user-stat-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.user-stat-value {
+    background: #0f172a;
+    color: #38bdf8;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #334155;
+}
 
             .question-card {
                 background: #1e293b;
@@ -348,13 +407,52 @@
                 %>
                 <ul class="stats-list">
                     <li>Preguntas totales: <span><%= (listaPreguntas != null) ? listaPreguntas.size() : 0 %></span></li>
-                    
                     <li>Respuestas activas: <span><%= respuestasTotales %></span></li>
-                    
                     <li>Desarrolladores: <span><%= desarrolladoresTotales %></span></li>
                 </ul>
-            </aside>
 
-        </div>
+                <%
+                    Usuario userStats = (Usuario) session.getAttribute("usuarioLogueado");
+                    if (userStats != null) {
+                        // Consultamos los aportes reales del usuario en la base de datos
+                        long misPreguntas = preguntaDAO.contarPreguntasPorUsuario(userStats.getIdUsuario());
+                        long misRespuestas = respuestaDAOStats.contarRespuestasPorUsuario(userStats.getIdUsuario());
+                %>
+                    <div style="border-top: 1px solid #334155; margin: 20px 0 15px 0;"></div>
+
+                    <h3 style="color: #38bdf8; font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">Mi Actividad
+                    </h3>
+                    
+                    <div class="user-stats-info">
+                        <div class="user-stat-row">
+                            <span>Desarrollador:</span>
+                            <strong style="color: #f1f5f9;"><%= userStats.getNombre() %></strong>
+                        </div>
+                        
+                        <div class="user-stat-row">
+                            <span>Rol:</span>
+                            <span class="user-stat-value" style="color: #10b981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2);">
+                                Estudiante
+                            </span>
+                        </div>
+
+                        <div class="user-stat-row">
+                            <span>Mis Preguntas:</span>
+                            <span class="user-stat-value"><%= misPreguntas %></span>
+                        </div>
+
+                        <div class="user-stat-row">
+                            <span>Mis Respuestas:</span>
+                            <span class="user-stat-value"><%= misRespuestas %></span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; font-size: 0.8rem; color: #94a3b8; text-align: center; font-style: italic; background: #0f172a; padding: 8px; border-radius: 6px;">
+                        🚀 ¡Haciendo fuerte a la comunidad!
+                    </div>
+                <%
+                    }
+                %>
+            </aside>
 
     </body>

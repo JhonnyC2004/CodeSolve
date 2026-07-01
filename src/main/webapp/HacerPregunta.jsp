@@ -24,17 +24,23 @@
                 box-sizing: border-box; 
                 margin: 0; 
                 padding: 0; 
-                font-family: 'Segoe UI', sans-serif; 
-            }
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+              }
             body { 
-                background-color: #0f172a; 
-                color: #f8fafc; 
+                background-color: #0f172a;
+                background-image: linear-gradient(rgba(248, 250, 252, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(248, 250, 252, 0.03) 1px, transparent 1px);
+                background-size: 40px 40px; 
+                color: #f8fafc;
+                min-height: 100vh;
+            }
+
+            .main-wrapper {
+                width: 100%;
                 display: flex;
                 flex-direction: column;
-                min-height: 100vh;
-                background-image: linear-gradient(rgba(248, 250, 252, 0.02) 1px, transparent 1px), 
-                    linear-gradient(90deg, rgba (248, 250, 252, 0.02) 1px, transparent 1px);
-                background-size: 30px 30px;
+                align-items: center;
+                min-height: calc(100vh - 70px); 
             }
 
             .navbar {

@@ -50,14 +50,24 @@
                 box-sizing: border-box; 
                 margin: 0; 
                 padding: 0; 
-                font-family: 'Segoe UI', sans-serif; 
-            }
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+              }
             body { 
-                background-color: #0f172a; 
-                color: #f8fafc; 
-                min-height: 100vh; 
+                background-color: #0f172a;
+                background-image: linear-gradient(rgba(248, 250, 252, 0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(248, 250, 252, 0.03) 1px, transparent 1px);
+                background-size: 40px 40px; 
+                color: #f8fafc;
+                min-height: 100vh;
             }
 
+            .main-wrapper {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-height: calc(100vh - 70px); 
+            }
             .navbar {
                 background: #1e293b; 
                 padding: 15px 30px; 
@@ -277,6 +287,15 @@
             .btn-reply:hover { 
                 box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3); 
             }
+            .btn-cancel { 
+                background: transparent; 
+                color: #94a3b8; 
+                border: 1px solid #334155; 
+            }
+            .btn-cancel:hover { 
+                background: rgba(148, 163, 184, 0.05); 
+                color: #f1f5f9; 
+            }
             .btn-back { 
                 display: inline-block; 
                 color: #94a3b8; 
@@ -352,7 +371,7 @@
                         
                         <div style="display: flex; gap: 12px;">
                             <button type="submit" class="btn-reply" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Guardar Cambios</button>
-                            <button type="button" class="btn-back" onclick="cancelarEdicion();" >Cancelar</button>
+                            <button type="button" class="btn-reply" onclick="cancelarEdicion();" >Cancelar</button>
                         </div>
                     </form>
                 </div>
@@ -407,8 +426,8 @@
                                         </div>
                                         
                                         <div style="display: flex; gap: 10px;">
-                                            <button type="submit" class="btn-reply" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.88rem;">Guardar</button>
-                                            <button type="button" onclick="cancelarEdicionRespuesta(<%= r.getIdRespuesta() %>);" style="background: #334155; color: #cbd5e1; border: 1px solid #475569; padding: 8px 16px; border-radius: 6px; font-size: 0.88rem; cursor: pointer;">Cancelar</button>
+                                            <button type="submit" class="btn-reply"style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Guardar</button>
+                                            <button type="button" class="btn-reply" onclick="cancelarEdicionRespuesta(<%= r.getIdRespuesta() %>);">Cancelar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -429,7 +448,7 @@
                     <form action="SvRespuesta" method="POST" class="reply-form">
                         <input type="hidden" name="idPregunta" value="<%= pregunta.getIdPregunta() %>">
                         <textarea name="txtContenido" placeholder="Escribe tu solución detallada o comparte un fragmento de código..." required></textarea>
-                        <button type="submit" class="btn-reply">Publicar Respuesta</button>
+                        <button type="submit" class="btn-reply" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Publicar Respuesta</button>
                     </form>
                 </div>
             </div>
