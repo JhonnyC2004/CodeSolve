@@ -63,4 +63,39 @@ public class PreguntaDAO {
         em.close();
     }
     }
+    //editar pregunta
+    public boolean editarPregunta(Pregunta pregunta) {
+    EntityManager em = emf.createEntityManager();
+    try {
+        em.getTransaction().begin();
+        em.merge(pregunta); // merge actualiza el registro mapeado por su ID
+        em.getTransaction().commit();
+        return true;
+    } catch (Exception e) {
+        if (em.getTransaction().isActive()) em.getTransaction().rollback();
+        return false;
+    } finally {
+        em.close();
+    }
+    }
+    //eliminar pregunta
+    public boolean eliminarPregunta(int idPregunta) {
+    EntityManager em = emf.createEntityManager();
+    try {
+        em.getTransaction().begin();
+        // En JPA, primero debemos buscar el objeto en el contexto actual para poder borrarlo
+        Pregunta p = em.find(Pregunta.class, idPregunta);
+        if (p != null) {
+            em.remove(p);
+            em.getTransaction().commit();
+            return true;
+        }
+        return false;
+    } catch (Exception e) {
+        if (em.getTransaction().isActive()) em.getTransaction().rollback();
+        return false;
+    } finally {
+        em.close();
+    }
+}
 }

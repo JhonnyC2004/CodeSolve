@@ -83,12 +83,95 @@
                 padding: 0 20px; 
             }
             
-            .main-question-card { 
+            .main-question-card {
                 background: #1e293b; 
                 border: 1px solid #334155; 
-                padding: 30px; 
+                padding: 24px; 
                 border-radius: 12px; 
-                margin-bottom: 30px; 
+                margin-bottom: 25px; 
+                position: relative;
+            }
+            .main-question-card h2 {
+                font-size: 1.6rem; 
+                font-weight: 700; 
+                color: #38bdf8; 
+                margin: 0 0 12px 0; 
+                line-height: 1.3;
+            }
+            .main-question-card .desc {
+                font-size: 1.05rem; 
+                color: #cbd5e1; 
+                line-height: 1.6; 
+                white-space: pre-wrap; 
+                margin-bottom: 20px;
+            }
+            .main-question-card .meta {
+                display: flex; 
+                justify-content: space-between; 
+                align-items: center; 
+                color: #94a3b8; 
+                font-size: 0.85rem; 
+                border-top: 1px solid #334155; 
+                padding-top: 15px;
+            }
+            .action-buttons-container {
+                margin-top: 15px; 
+                display: flex; 
+                gap: 20px; 
+                border-top: 1px dashed #475569; 
+                padding-top: 15px;
+            }
+            .btn-action-edit {
+                color: #38bdf8; 
+                text-decoration: none; 
+                font-size: 0.9rem; 
+                font-weight: 600; 
+                display: flex; 
+                align-items: center; 
+                gap: 5px;
+                transition: color 0.2s;
+            }
+            .btn-action-edit:hover {
+                color: #7dd3fc; 
+            }
+            .btn-action-delete {
+                color: #ef4444; 
+                text-decoration: none; 
+                font-size: 0.9rem; 
+                font-weight: 600; 
+                display: flex; 
+                align-items: center; 
+                gap: 5px;
+                transition: color 0.2s;
+            }
+            .btn-action-delete:hover {
+                color: #f87171; 
+            }
+            .edit-form-group {
+                margin-bottom: 18px;
+            }
+            .edit-form-group label {
+                color: #94a3b8; 
+                font-size: 0.85rem; 
+                display: block; 
+                margin-bottom: 6px; 
+                font-weight: 500;
+            }
+            .edit-form-group input, .edit-form-group textarea {
+                width: 100%; 
+                background: #0f172a; 
+                border: 1px solid #475569; 
+                border-radius: 8px; 
+                padding: 12px; 
+                color: #f8fafc; 
+                font-size: 0.95rem; 
+                outline: none; 
+                box-sizing: border-box;
+            }
+            .edit-form-group textarea {
+                min-height: 160px; 
+                resize: vertical; 
+                font-family: inherit;
             }
             .question-title { 
                 font-size: 1.8rem; 
@@ -104,13 +187,24 @@
                 margin-bottom: 20px; 
                 white-space: pre-line; 
             }
-            .meta-info {
-                display: flex; 
-                justify-content: space-between; 
-                color: #94a3b8; 
-                font-size: 0.85rem; 
-                border-top: 1px solid #334155; 
-                padding-top: 15px; 
+            .community-tip-box {
+                background: rgba(56, 189, 248, 0.05);
+                border: 1px dashed rgba(56, 189, 248, 0.3);
+                padding: 14px 18px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .community-tip-box p {
+                margin: 0;
+                font-size: 0.9rem;
+                color: #94a3b8;
+                line-height: 1.5;
+            }
+            .community-tip-box strong {
+                color: #38bdf8; 
             }
 
             .answers-section { 
@@ -172,7 +266,7 @@
             }
             .btn-reply { 
                 background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); 
-                color: white; 
+                color: black; 
                 border: none; 
                 padding: 12px 24px; 
                 border-radius: 8px; 
@@ -208,15 +302,68 @@
         <div class="main-container">
             <a href="index.jsp" class="btn-back">← Volver al Feed</a>
 
-            <div class="main-question-card">
-                <div class="question-title"><%= pregunta.getTitulo() %></div>
-                <div class="question-desc"><%= pregunta.getDescripcion() %></div>
-                <div class="meta-info">
+            <div class="main-question-card" id="vistaPregunta">
+                <h2><%= pregunta.getTitulo() %></h2>
+                <div class="desc"><%= pregunta.getDescripcion() %></div>
+                
+                <div class="meta">
                     <div>Por <strong style="color: #f1f5f9;"><%= nombreAutorP %></strong></div>
-                    <div>Publicado el: <%= pregunta.getFechaCreacion() != null ? sdfEspanol.format
-                            (pregunta.getFechaCreacion()) : "Reciente" %></div>
+                    <div>Publicado el: <%= pregunta.getFechaCreacion() != null ? sdfEspanol.format(pregunta.getFechaCreacion()) : "Reciente" %></div>
                 </div>
+
+                <%
+                    Usuario userLog = (Usuario) session.getAttribute("usuarioLogueado");
+                    if (userLog != null && autorPregunta != null && userLog.getIdUsuario() == autorPregunta.getIdUsuario()) {
+                %>
+                    <div class="action-buttons-container">
+                        <a href="javascript:void(0);" onclick="activarEdicion();" class="btn-action-edit">Editar Pregunta
+                        </a>
+                        <a href="SvEditElimPregunta?id=<%= pregunta.getIdPregunta() %>" 
+                           onclick="return confirm('¿Seguro que deseas eliminar esta pregunta de forma permanente? Esto borrará también sus respuestas.');"
+                           class="btn-action-delete">Eliminar Pregunta
+                        </a>
+                    </div>
+                <%
+                    }
+                %>
             </div>
+
+            <% if (userLog != null && autorPregunta != null && userLog.getIdUsuario() == autorPregunta.getIdUsuario()) { %>
+                <div id="formEdicionPregunta" class="main-question-card" style="display: none;">
+                    <h3 style="color: #f1f5f9; margin-top: 0; margin-bottom: 20px; font-size: 1.3rem;">Editar Pregunta</h3>
+                    
+                    <form action="SvEditElimPregunta" method="POST">
+                        <input type="hidden" name="idPregunta" value="<%= pregunta.getIdPregunta() %>">
+                        
+                        <div class="edit-form-group">
+                            <label>Título de la duda</label>
+                            <input type="text" name="txtTitulo" value="<%= pregunta.getTitulo() %>" required>
+                        </div>
+                        
+                        <div class="edit-form-group">
+                            <label>Descripción del problema</label>
+                            <textarea name="txtDescripcion" required><%= pregunta.getDescripcion() %></textarea>
+                        </div>
+                        
+                        <div class="edit-form-group">
+                            <label>Etiquetas (separadas por comas)</label>
+                            <input type="text" name="txtEtiquetas" value="<%= pregunta.getEtiquetas() != null ? pregunta.getEtiquetas() : "" %>" placeholder="ej: java, jpa, mysql">
+                        </div>
+                        
+                        <div style="display: flex; gap: 12px;">
+                            <button type="submit" class="btn-reply" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Guardar Cambios</button>
+                            <button type="button" class="btn-search" onclick="cancelarEdicion();" style="background: #334155; border-color: #475569;">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            <% } %>
+                <div class="community-tip-box">
+        <span style="font-size: 1.2rem;">💡</span>
+        <p>
+            <strong>¿Vas a responder?</strong> Explica el <em>porqué</em> de tu solución. 
+            La paciencia con los nuevos desarrolladores hace fuerte a nuestra comunidad.
+        </p>
+    </div>
 
             <div class="answers-section">
                 <%
