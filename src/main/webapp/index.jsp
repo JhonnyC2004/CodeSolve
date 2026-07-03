@@ -152,54 +152,49 @@
             }
             
             .user-stats-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 20px; /* Separación respecto a las estadísticas de la comunidad */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.user-stats-card h3 {
-    color: #38bdf8; /* Azul CodeSolve */
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.user-stats-info {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.user-stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9rem;
-    color: #cbd5e1;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed #334155;
-}
-
-.user-stat-row:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-}
-
-.user-stat-value {
-    background: #0f172a;
-    color: #38bdf8;
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: 1px solid #334155;
-}
+                background: #1e293b;
+                border: 1px solid #334155;
+                border-radius: 12px;
+                padding: 20px;
+                margin-top: 20px; 
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+            .user-stats-card h3 {
+                color: #38bdf8; 
+                font-size: 1.1rem;
+                font-weight: 600;
+                margin-bottom: 15px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .user-stats-info {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            .user-stat-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.9rem;
+                color: #cbd5e1;
+                padding-bottom: 8px;
+                border-bottom: 1px dashed #334155;
+            }
+            .user-stat-row:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+            .user-stat-value {
+                background: #0f172a;
+                color: #38bdf8;
+                padding: 2px 10px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                border: 1px solid #334155;
+            }
 
             .question-card {
                 background: #1e293b;

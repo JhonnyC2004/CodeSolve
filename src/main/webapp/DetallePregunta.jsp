@@ -455,7 +455,7 @@
 
     </body>
     <script>
-    // Control de la Pregunta Principal
+    //control de la pregunta Principal
     function activarEdicion() {
         document.getElementById('vistaPregunta').style.display = 'none';
         document.getElementById('formEdicionPregunta').style.display = 'block';
@@ -464,8 +464,6 @@
         document.getElementById('formEdicionPregunta').style.display = 'none';
         document.getElementById('vistaPregunta').style.display = 'block';
     }
-
-    // Control Dinámico de cada Respuesta usando su ID único
     function activarEdicionRespuesta(id) {
         document.getElementById('vistaRespuesta_' + id).style.display = 'none';
         document.getElementById('formEdicionRespuesta_' + id).style.display = 'block';
