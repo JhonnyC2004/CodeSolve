@@ -10,7 +10,7 @@ Desarrollado como proyecto académico, el sistema prioriza la consistencia visua
 
 * **Landing Page Informativa:** Pantalla de bienvenida que introduce el propósito de la app y centraliza los flujos de acceso (Login / Registro).
 * **Gestión de Preguntas y Respuestas (CRUD Completo):** Los usuarios autenticados pueden crear, editar, visualizar y eliminar sus hilos de discusión técnicos.
-* **Módulo de Autenticación Seguro:** Control de sesiones HTTP con funciones avanzadas de experiencia de usuario (UX), como el toggle dinámico (`👁️`/`🙈`) para visualizar contraseñas.
+* **Módulo de Autenticación Seguro:** Control de sesiones HTTP con funciones avanzadas de experiencia de usuario (UX).
 * **Dashboard Lateral (Sidebar):** Visualización en tiempo real de métricas de la comunidad (usuarios totales, respuestas) y estadísticas personalizadas del usuario logueado (*Mis Preguntas* y *Mis Respuestas*).
 * **Consejos Didácticos:** Enfoque pedagógico en las respuestas para guiar de manera empática a los programadores junior.
 
